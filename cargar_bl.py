@@ -13,7 +13,7 @@ client = MongoClient('127.0.0.1', 27017)
 
 def cargar_bl():
 	db = client['waf']
-	collections = [db['configuraciones'],db['whitelist'],db['blacklist'],db['zonas']]
+	collections = [db['config'],db['whitelist'],db['blacklist'],db['zonas']]
 
 	while True:
 		ips = input("\tIngresa la IP separada por coma o por guion en caso de ser un rango.\tVAWAF:>> ")
@@ -24,14 +24,17 @@ def cargar_bl():
 		#print(porcoma)
 
 #es una unica ip
-		if (len(porguion) == 1 and len(porcoma) == 1 and duplicidad_db.checar_duplicidad('blacklist', ips)):
-			if (conf_ini.es_IP_valida(ips)):
+		if (len(porguion) == 1 and len(porcoma)):
+			if (conf_ini.es_IP_valida(ips) and duplicidad_db.checar_duplicidad('blacklist', ips)):
 				ahora = datetime.datetime.now()	#obtiene fecha y hora actual
 				collections[2].insert_one({"ip":ips, "agent":"","ataque":"precargada", "date_at":ahora})
 				#print(ips)
 				break
 			else:
-				print("\tIps introducidas incorrectamente...\nPulse una tecla para continuar.")
+				if not(duplicidad_db.checar_duplicidad('blacklist', ips)):
+					print("\tEsta Ip ya existe en la BlackList.")
+				else:	
+					print("\tIps introducidas incorrectamente...\nPulse una tecla para continuar.")
 
 #estan separadas por comas
 		elif (len(porguion) == 1 and len(porcoma) > 1):

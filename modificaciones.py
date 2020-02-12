@@ -9,7 +9,7 @@ from pymongo import MongoClient
 #variables globales
 client = MongoClient('127.0.0.1', 27017)
 db = client['waf']
-collection = db['configuraciones']
+collection = db['config']
 collection_log = db['log']
 
 def mod_pass():

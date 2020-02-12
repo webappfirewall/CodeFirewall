@@ -70,9 +70,8 @@ def configuracionInicial():
 
 	#guardar los datos en mongo db
 	db = client['waf']
-	collection = db['configuraciones']
+	collection = db['config']
 	un_dia = 1
-	un_mes = 1
 	
 	collection.insert_one({"name":"usuario","valor":str(usuario)})
 	collection.insert_one({"name":"password","valor":str(password)})
@@ -82,7 +81,7 @@ def configuracionInicial():
 	#documentos precargados
 	collection.insert_one({"name":"numataques","valor":500})
 	collection.insert_one({"name":"cuarentena","valor":un_dia})
-	collection.insert_one({"name":"tiempobl","valor":un_mes})
+	collection.insert_one({"name":"tiempobl","valor":un_dia})
 
 	print("\tDatos guardados exitosamente.")
 

@@ -17,7 +17,7 @@ client = MongoClient(Mongo_URI)
 def primeraVez():
 	db = client['waf']
 
-	collections = [db['configuraciones'],db['whitelist'],db['blacklist'],db['zonas']]
+	collections = [db['config'],db['whitelist'],db['blacklist'],db['zonas']]
 	if (collections[0].count_documents({}) == 0):
 		conf_ini.configuracionInicial()
 	else:
