@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 #By: José María HernAndez Estrada & Jason Adair Rossello Romero
 
-import re
 import conf_ini
 import datetime
 import calendar
+import duplicidad_db
 from pymongo import MongoClient
 
 #variables globales
@@ -23,7 +23,8 @@ def cargar_bl():
 		#print(porguion)
 		#print(porcoma)
 
-		if (len(porguion) == 1 and len(porcoma) == 1):
+#es una unica ip
+		if (len(porguion) == 1 and len(porcoma) == 1 and duplicidad_db.checar_duplicidad('blacklist', ips)):
 			if (conf_ini.es_IP_valida(ips)):
 				ahora = datetime.datetime.now()	#obtiene fecha y hora actual
 				collections[2].insert_one({"ip":ips, "agent":"","ataque":"precargada", "date_at":ahora})
@@ -53,23 +54,27 @@ def cargar_bl():
 				if (conf_ini.es_IP_valida(porcoma[0]) and conf_ini.es_IP_valida(porcoma[1])):
 					ahora = datetime.datetime.now() #obtiene fecha y hora actual
 					for ip in porcoma:
+						if(duplicidad_db.checar_duplicidad('blacklist', ip)):
 							collections[2].insert_one({"ip":ip, "agent":"","ataque":"precargada", "date_at":ahora})
-							#print(ip)
+						#print(ip)
 					break
 
 #estan separadas por guiones
 		elif (len(porguion) > 1 and len(porcoma) == 1 and valida_rango((porguion[0].split('.')), (porguion[1]).split('.'))):
 			if (conf_ini.es_IP_valida(porguion[0]) and conf_ini.es_IP_valida(porguion[1])):
 				ahora = datetime.datetime.now() #obtiene echa y hora actual
-				ip1 = (porguion[0].split(".")).replace(' ', '')
-				ip2 = (porguion[1].split(".")).replace(' ', '')
+				ip1 = porguion[0].split(".")
+				ip2 = porguion[1].split(".")
+
+				############quitaespacios
 
 				#difieren en el ultimo tramo
 				if (ip1[0] == ip2[0] and ip1[1] == ip2[1] and ip1[2] == ip2[2] and (ip1[3] > ip2[3] or ip1[3] < ip2[3])):
 					rango = reloj(int(ip1[3]), int(ip2[3]))
 					for i in rango:
 						ipx = ip1[0] + "." + ip1[1] + "." + ip1[2] + "." + str(i)
-						collections[2].insert_one({"ip":ipx, "agent":"","ataque":"precargada", "date_at":ahora})
+						if(duplicidad_db.checar_duplicidad('blacklist', ipx)):
+							collections[2].insert_one({"ip":ipx, "agent":"","ataque":"precargada", "date_at":ahora})
 						#print(ipx)
 					break
 
@@ -88,7 +93,8 @@ def cargar_bl():
 							#print ("\tEl tope es ",tope)
 						for segundo in range(tope - int(control)):
 							ipx = str(ip1[0]) + "." + str(ip1[1]) + "." + str(ip1[2]) + "." + str(ip1[3])
-							collections[2].insert_one({"ip":ipx, "agent":"","ataque":"precargada", "date_at":ahora})
+							if(duplicidad_db.checar_duplicidad('blacklist', ipx)):
+								collections[2].insert_one({"ip":ipx, "agent":"","ataque":"precargada", "date_at":ahora})
 							#print(ipx)
 							ip1[3] = int(ip1[3]) + 1
 						ip1[2] = int(ip1[2]) + 1
@@ -96,14 +102,14 @@ def cargar_bl():
 						control = 0
 					break
 				elif (ip1[0] == ip2[0] and ip1[1] == ip2[1] and ip1[2] == ip2[2] and ip1[3] == ip2[3]):
-					print("\tWARNING: Las Ips no pueden ser identicas.\nPulse una tecla para continuar.")
+					print("\t\t\tWARNING: Las Ips no pueden ser identicas.\n\t\t\tPulse una tecla para continuar.")
 				else:
-					print("\tWARNING: En caso de que exista variacion en el primer y segundo octeto ir a la configuraion por zonas.\nPulse una tecla para continuar.")
+					print("\t\t\tWARNING: En caso de que exista variacion en el primer y segundo octeto ir a la configuraion por zonas, las Ip no pueden ser duplicadas.\n\t\t\tPulse una tecla para continuar.")
 			else:
 				print("\tIps introducidas incorrectamente...\nPulse una tecla para continuar.")
 		#default
 		else:
-			print("\tIps introducidas incorrectamente, la primera Ip debe ser menor que la segunda Ip\nWARNING En caso de que exista variacion en el primer y segundo octeto ir a la configuraion por zonas...\nPulse una tecla para continuar.")
+			print("\tIps introducidas incorrectamente, la primera Ip debe ser menor que la segunda Ip\n\t\t\tWARNING En caso de que exista variacion en el primer y segundo octeto ir a la configuraion por zonas...\nPulse una tecla para continuar.")
 
 def valida_rango(ip1, ip2):#127.1.2.250-127.2.2.10
 	if (int(ip1[0])<=int(ip2[0]) and int(ip1[1])<=int(ip2[1]) and int(ip1[2])<=int(ip2[2]) and int(ip1[3])<=int(ip2[3])):

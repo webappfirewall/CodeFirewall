@@ -3,6 +3,7 @@
 #By: José María HernAndez Estrada & Jason Adair Rossello Romero
 
 import re
+import datetime
 from pymongo import MongoClient
 
 #variables globales
@@ -15,8 +16,8 @@ def es_correo_valido(correo):
     return re.match(expresion_regular, correo) is not None
  
 def es_IP_valida(ip):
-	ips = ip.replace(' ', '')
-	return bool(re.match(r'^((0|[1-9][0-9]?|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\.|$)){4}$', ips))
+	#ips = ip.replace(' ', '')
+	return bool(re.match(r'^((0|[1-9][0-9]?|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\.|$)){4}$', ip))
 
 def es_pass_valida(password):
 
@@ -70,7 +71,18 @@ def configuracionInicial():
 	#guardar los datos en mongo db
 	db = client['waf']
 	collection = db['configuraciones']
-	collection.insert_one({"Usuario":str(usuario),"password":str(password),"email":str(email),"puerto":str(puerto), "ip":str(ip)})
+	un_dia = 1
+	un_mes = 1
+	
+	collection.insert_one({"name":"usuario","valor":str(usuario)})
+	collection.insert_one({"name":"password","valor":str(password)})
+	collection.insert_one({"name":"email","valor":str(email)})
+	collection.insert_one({"name":"puerto","valor":str(puerto)})
+	collection.insert_one({"name":"ip","valor":str(ip)})
+	#documentos precargados
+	collection.insert_one({"name":"numataques","valor":500})
+	collection.insert_one({"name":"cuarentena","valor":un_dia})
+	collection.insert_one({"name":"tiempobl","valor":un_mes})
 
 	print("\tDatos guardados exitosamente.")
 
@@ -78,7 +90,6 @@ def configuracionInicial():
 	results = collection.find() 
 	for r in results:
 		print("\t", r)
-
 
 #if  __name__ ==  '__main__':
 #	configuracionInicial()
