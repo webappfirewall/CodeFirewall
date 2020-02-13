@@ -28,36 +28,61 @@ def generarReporte():
     canv.setFont('Helvetica', 20)
     canv.drawString(200, 750, 'Reporte del sistema WAF')
 
+#mandamos el valor actual de y, estas son las funciones para llamar los tramos que contienen ips
     y = 690
-    canv.setFont('Helvetica', 12)
-    canv.drawString(30, 710, 'Ip precargadas en la WhiteList.')
-    canv.setFont('Helvetica', 8)
-    if collection.find({'name': 'whitel'}) != None:
-        cargaWhite = collection.find({'name':'whitel'})
-        for dato in cargaWhite:
-            canv.drawString(50 ,y , "Ip: " + dato['ip'] + " - Descripción: " + dato['descripcion'] + " - Fecha: " + str(dato['date_at']))
-            y = y - 10
-
+    y = tramosip(y, 'Ip precargadas en la WhiteList.', 'Ip: ', 'whitel')
+    y = tramosip(y, 'Ip precargadas en la WhiteList.', 'Ip: ', 'whitel')
+    y = tramosip(y, 'Ip precargadas en la WhiteList.', 'Ip: ', 'whitel')
+    y = tramosip(y, 'Ips desbloqueadas manualmente.', 'Ip: ', 'desbloqueo')
+# mandamos el valor actual de y, estas son las funciones para llamar los tramos que contienen configuraciones
     y = tramos(y, 'Modificaciones de contraseña.', 'Contraseña actualizada: ', 'password')
     y = tramos(y, 'Modificaciones de número de ataques para notificación.', 'Límite: ', 'numataques')
     y = tramos(y, 'Modificaciones de tiempo de cuarentena de una Ip.', 'Tiempo(dias): ', 'cuarentena')
     y = tramos(y, 'Modificaciones de tiempo de vaciado de la BlackList.', 'Tiempo(dias): ', 'tiempobl')
-    y = tramos(y, 'Modificaciones de correo electrónico.', 'Tiempo(dias): ', 'email')
+    tramos(y, 'Modificaciones de correo electrónico.', 'Tiempo(dias): ', 'email')
 
     canv.save()
 
 def tramos(y, subtitulo, texto, llave):
     y = y - 10
+    y = hojaNueva(y)
     canv.setFont('Helvetica', 12)
     canv.drawString(30, y, subtitulo)
-    canv.setFont('Helvetica', 8)
     y = y - 20
+    y = hojaNueva(y)
     if collection.find({'name': llave}) != None:
         passu = collection.find({'name': llave})
         for dato in passu:
+            canv.setFont('Helvetica', 8)
             canv.drawString(50, y, texto + str(dato['valor']) + " - Fecha: " + str(dato['date_at']))
             y = y - 10
+            y = hojaNueva(y)
     return y
+
+def tramosip(y, subtitulo, texto, llave):
+    y = y - 10
+    y = hojaNueva(y)
+    canv.setFont('Helvetica', 12)
+    canv.drawString(30, y, subtitulo)
+    y = y - 20
+    y = hojaNueva(y)
+    if collection.find({'name': llave}) != None:
+        passu = collection.find({'name': llave})
+        for dato in passu:
+            canv.setFont('Helvetica', 8)
+            canv.drawString(50, y, texto + str(dato['ip']) + " - Descripción: " + dato['descripcion'] + " - Fecha: " + str(dato['date_at']))
+            y = y - 10
+            y = hojaNueva(y)
+    return y
+
+def hojaNueva(y):
+    if y <= 30:
+        # Salto de pagina
+        canv.showPage()
+        y = 750
+        return y
+    else:
+        return y
 
 def crear(sistema, comunidad, indice):
     global can
@@ -91,23 +116,4 @@ def crear(sistema, comunidad, indice):
 
     can.save()
 
-
-def extraeIpDesbl():
-    cargaWhite = collection.find({'name': 'whitel'})
-    ipdesbl = collection.find({'name': 'desbloqueo'})
-    uppass = collection.find({'name': 'password'})
-    numataques = collection.find({'name': 'numataques'})
-    cuarentena = collection.find({'name': 'cuarentena'})
-    tiempobl = collection.find({'name': 'tiempobl'})
-    email = collection.find({'name': 'email'})
-
-    for n in ipdesbl:
-        print("desbl", n)
-
-
-    for n in cargaWhite:
-        print("white", n)
-        print(n['ip'])
-
-#extraeIpDesbl()
-generarReporte()
+#generarReporte()

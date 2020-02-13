@@ -8,6 +8,7 @@ import cargar_bl
 import cargar_wl
 import desbloqueo
 import modificaciones
+import reporte
 from pymongo import MongoClient
 
 #variables globales
@@ -70,8 +71,13 @@ if  __name__ ==  '__main__':
 
 		elif opcionMenu == "4":
 			print("_____________________________________________________________________________________________________________________\n")
-			print("**** Generar reporte. ****\n")
-			print("\nGuardado.")
+			print("**** Generar reporte. ****\n\nGenerando...")
+			try:
+				reporte.generarReporte()
+				print("Reporte generado exitosamente.\n")
+			except ValueError:
+				print("Ocurrio un error al generar el reporte.")
+
 
 		elif opcionMenu == "5":
 			print("_____________________________________________________________________________________________________________________\n")
