@@ -27,13 +27,13 @@ def login():
 	pass
 
 def menu():
-	print("\n**************** Firewall ****************\n")
+	print("\n**************** Firewall v1.0 ****************\n")
 	print(	"1.  Cargar BlackList.")
 	print(	"2.  Cargar WhiteList.")
 	print(	"3.  Desbloqueo de IP.")
 	print(	"4.  Generar reporte.")
-	print(	"5.  Bloqueo por zona")
-	print(	"6.  Modificar Password")
+	print(	"5.  Bloqueo por zona.")
+	print(	"6.  Modificar Password.")
 	print(	"7.  Modificar número de ataques para notificación.")
 	print(	"8.  Modificar tiempo de cuarentena.")
 	print(	"9.  Modificar tiempo de vaciado de BlackList.")

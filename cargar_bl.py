@@ -23,8 +23,11 @@ def cargar_bl():
 		#print(porguion)
 		#print(porcoma)
 
+		#permite regresar con back
+		if ips == "back" or ips == "BACK":
+			break
 #es una unica ip
-		if (len(porguion) == 1 and len(porcoma)):
+		elif (len(porguion) == 1 and len(porcoma)):
 			if (conf_ini.es_IP_valida(ips) and duplicidad_db.checar_duplicidad('blacklist', ips)):
 				ahora = datetime.datetime.now()	#obtiene fecha y hora actual
 				collections[2].insert_one({"ip":ips, "agent":"","ataque":"precargada", "date_at":ahora})

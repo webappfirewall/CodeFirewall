@@ -16,7 +16,10 @@ def mod_pass():
 	while True:
 		passActual = input("\tIngrese su contraseña actual.\t\tVAWAF:>> ")
 
-		if collection.find_one({"name":"password","valor":passActual}) == None:
+		#permite regresar con back
+		if passActual == "back" or passActual == "BACK":
+			break
+		elif collection.find_one({"name":"password","valor":passActual}) == None:
 			print("\tLa contraseña es incorrecta.")
 		else:
 			print("\t\tContraseña correcta.")
@@ -31,7 +34,7 @@ def mod_pass():
 							#guardado de la nueva contraseña
 							collection.find_one_and_replace({"name":"password","valor": passActual}, {"name":"password","valor": nuevaPass})
 							#guarda en log para reportar
-							collection_log.insert_one({"name":"password","valor": nuevaPass})
+							collection_log.insert_one({"name":"password","valor": nuevaPass,"date_at":datetime.datetime.now()})
 							break
 						else:
 							print("\t\tWARNIG La contraseña no es la misma.")
@@ -48,47 +51,72 @@ def num_ataques():
 	while True:
 		numero = input("\tIngrese el nuevo un número de ataques para notificación (entre 50 y 1000).\t\tVAWAF:>> ")
 
-		if int(numero) >= 50 and int(numero) <= 1000:
-			#busca y reemplaza el valor
-			collection.find_one_and_replace({"name":"numataques"},{"name":"numataques","valor":int(numero)})
-			#guarda en log para reportar
-			collection_log.insert_one({"name":"numataques","valor":int(numero)})
-			break
-		else:
-			print("Número inválido, debe estar en número y entre 50 y 1000")
+		try:
+			numero = int(numero)
+			#permite regresar con back
+			if numero == "back" or numero == "BACK":
+				break
+			elif int(numero) >= 50 and int(numero) <= 1000:
+				#busca y reemplaza el valor
+				collection.find_one_and_replace({"name":"numataques"},{"name":"numataques","valor":int(numero)})
+				#guarda en log para reportar
+				collection_log.insert_one({"name":"numataques","valor":int(numero),"date_at":datetime.datetime.now()})
+				break
+			else:
+				print("Número inválido, debe estar en número y entre 50 y 1000")
+		except ValueError:
+			print("Tiempo inválido, debe ser un número y  estar entre 1 y 29")
 
 def tcuarentena():
 	while True:
 		numero = input("\tIngrese el nuevo tiempo de cuarentena en dias (entre 1 y 29).\t\tVAWAF:>> ")
 
-		if int(numero) >= 1 and int(numero) <= 29:
-			#busca y reemplaza los datos
-			collection.find_one_and_replace({"name":"cuarentena"},{"name":"cuarentena","valor":int(numero)})
-			#guarda en log para reportar
-			collection_log.insert_one({"name":"cuarentena","valor":int(numero)})
-			break
-		else:
+		try:
+			numero = int(numero)
+			# permite regresar con back
+			if numero == "back" or numero == "BACK":
+				break
+			elif int(numero) >= 1 and int(numero) <= 29:
+				# busca y reemplaza los datos
+				collection.find_one_and_replace({"name": "cuarentena"}, {"name": "cuarentena", "valor": int(numero)})
+				# guarda en log para reportar
+				collection_log.insert_one({"name": "cuarentena", "valor": int(numero),"date_at":datetime.datetime.now()})
+				break
+			else:
+				print("Tiempo inválido, debe ser un número y  estar entre 1 y 29")
+		except ValueError:
 			print("Tiempo inválido, debe ser un número y  estar entre 1 y 29")
 
 def vaciadobl():
 	while True:
 		numero = input("\tIngrese el nuevo tiempo de vaciado de la BlackList en días (entre 1 y 100).\t\tVAWAF:>> ")
 
-		if int(numero) >= 1 and int(numero) <= 100:
-			collection.find_one_and_replace({"name":"tiempobl"},{"name":"tiempobl","valor":int(numero)})
-			#guarda en log para reportar
-			collection_log.insert_one({"name":"tiempobl","valor":int(numero)})
-			break
-		else:
-			print("Tiempo inválido, debe ser un número y  estar entre 1 y 100")
+		try:
+			numero = int(numero)
+			#permite regresar con back
+			if numero == "back" or numero == "BACK":
+				break
+			elif int(numero) >= 1 and int(numero) <= 100:
+				collection.find_one_and_replace({"name":"tiempobl"},{"name":"tiempobl","valor":int(numero)})
+				#guarda en log para reportar
+				collection_log.insert_one({"name":"tiempobl","valor":int(numero),"date_at":datetime.datetime.now()})
+				break
+			else:
+				print("Tiempo inválido, debe ser un número y  estar entre 1 y 100")
+		except ValueError:
+			print("Tiempo inválido, debe ser un número y  estar entre 1 y 29")
 
 def mod_correo():
 	while True:
 		correo = input("\tIngrese el nuevo correo.\t\tVAWAF:>> ")
-		if(conf_ini.es_correo_valido(correo)):
+		
+		#permite regresar con back
+		if correo == "back" or correo == "BACK":
+			break
+		elif(conf_ini.es_correo_valido(correo)):
 			collection.find_one_and_replace({"name":"email"},{"name":"email","valor":correo})
 			#guarda en log para reportar
-			collection_log.insert_one({"name":"email","valor":correo})
+			collection_log.insert_one({"name":"email","valor":correo,"date_at":datetime.datetime.now()})
 			break
 		else:
 			print("\tEl formato del correo no es correto.")

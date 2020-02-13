@@ -17,17 +17,19 @@ def desbloquear():
 	while True:
 		ip = input("\tIntroduce la Ip que deseas desbloquear.\t\t\t\t\tVAWAF:>> ")
 
-		if conf_ini.es_IP_valida(ip):
+		#permite regresar con back
+		if ip == "back" or ip == "BACK":
 			break
+		elif conf_ini.es_IP_valida(ip):
+			if (collection.find_one_and_delete({"ip" : str(ip)}) == None):
+				print("\t\tLa Ip no existe en la BlackList.")
+			else:
+				descripcion = input("\tIntroduce una descripcion de por que desbloqueas esta Ip.\t\tVAWAF:>> ")
+				print("\t\tLa Ip se desbloqueo correctamente.")
+				ahora = datetime.datetime.now()
+				collection_log.insert_one({"name":"desbloqueo","ip":ip,"descripcion":descripcion,"date_at":ahora})
+				break
 		else:
 			print("\t\tLa Ip no tiene un formato válido.")
-
-	if (collection.find_one_and_delete({"ip" : str(ip)}) == None):
-		print("\t\tLa Ip no existe en la BlackList.")
-	else:
-		descripcion = input("\tIntroduce una descripcion de por que desbloqueas esta Ip.\t\tVAWAF:>> ")
-		print("\t\tLa Ip se desbloqueo correctamente.")
-		ahora = datetime.datetime.now()
-		collection_log.insert_one({"ip":ip,"descripcion":descripcion,"date_at":ahora})
 
 #desbloquear()
