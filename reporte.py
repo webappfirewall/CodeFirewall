@@ -31,8 +31,6 @@ def generarReporte():
 #mandamos el valor actual de y, estas son las funciones para llamar los tramos que contienen ips
     y = 690
     y = tramosip(y, 'Ip precargadas en la WhiteList.', 'Ip: ', 'whitel')
-    y = tramosip(y, 'Ip precargadas en la WhiteList.', 'Ip: ', 'whitel')
-    y = tramosip(y, 'Ip precargadas en la WhiteList.', 'Ip: ', 'whitel')
     y = tramosip(y, 'Ips desbloqueadas manualmente.', 'Ip: ', 'desbloqueo')
 # mandamos el valor actual de y, estas son las funciones para llamar los tramos que contienen configuraciones
     y = tramos(y, 'Modificaciones de contraseña.', 'Contraseña actualizada: ', 'password')

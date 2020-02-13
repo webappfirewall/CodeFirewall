@@ -78,7 +78,6 @@ if  __name__ ==  '__main__':
 			except ValueError:
 				print("Ocurrio un error al generar el reporte.")
 
-
 		elif opcionMenu == "5":
 			print("_____________________________________________________________________________________________________________________\n")
 			print("**** Bloqueo por zona. ****\n")

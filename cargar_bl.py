@@ -4,8 +4,8 @@
 
 import conf_ini
 import datetime
-import calendar
 import duplicidad_db
+import muestraColecciones
 from pymongo import MongoClient
 
 #variables globales
@@ -23,14 +23,19 @@ def cargar_bl():
 		#print(porguion)
 		#print(porcoma)
 
-		#permite regresar con back
+#permite regresar con back
 		if ips == "back" or ips == "BACK":
 			break
+#con el comando show muestra todas las ip contenidas en la base de datos
+		elif ips == "show":
+			muestraColecciones.showcoll('blacklist')
 #es una unica ip
 		elif (len(porguion) == 1 and len(porcoma)):
 			if (conf_ini.es_IP_valida(ips) and duplicidad_db.checar_duplicidad('blacklist', ips)):
 				ahora = datetime.datetime.now()	#obtiene fecha y hora actual
 				collections[2].insert_one({"ip":ips, "agent":"","ataque":"precargada", "date_at":ahora})
+				#busca y borra en caso de estar en la wl
+				duplicidad_db.buscaBorra(ips, 'whitelist')
 				#print(ips)
 				break
 			else:
@@ -62,6 +67,8 @@ def cargar_bl():
 					for ip in porcoma:
 						if(duplicidad_db.checar_duplicidad('blacklist', ip)):
 							collections[2].insert_one({"ip":ip, "agent":"","ataque":"precargada", "date_at":ahora})
+							# busca y borra en caso de estar en la wl
+							duplicidad_db.buscaBorra(ip, 'whitelist')
 						#print(ip)
 					break
 
@@ -81,6 +88,8 @@ def cargar_bl():
 						ipx = ip1[0] + "." + ip1[1] + "." + ip1[2] + "." + str(i)
 						if(duplicidad_db.checar_duplicidad('blacklist', ipx)):
 							collections[2].insert_one({"ip":ipx, "agent":"","ataque":"precargada", "date_at":ahora})
+							# busca y borra en caso de estar en la wl
+							duplicidad_db.buscaBorra(ipx, 'whitelist')
 						#print(ipx)
 					break
 
@@ -101,6 +110,8 @@ def cargar_bl():
 							ipx = str(ip1[0]) + "." + str(ip1[1]) + "." + str(ip1[2]) + "." + str(ip1[3])
 							if(duplicidad_db.checar_duplicidad('blacklist', ipx)):
 								collections[2].insert_one({"ip":ipx, "agent":"","ataque":"precargada", "date_at":ahora})
+								# busca y borra en caso de estar en la wl
+								duplicidad_db.buscaBorra(ipx, 'whitelist')
 							#print(ipx)
 							ip1[3] = int(ip1[3]) + 1
 						ip1[2] = int(ip1[2]) + 1

@@ -4,7 +4,7 @@
 
 import conf_ini
 import datetime
-import calendar
+import muestraColecciones
 import duplicidad_db
 from pymongo import MongoClient
 
@@ -28,6 +28,9 @@ def cargarwl():
 		#permite regresar con back
 		if opcion == "back" or opcion == "BACK":
 			break
+		# con el comando show muestra todas las ip contenidas en la base de datos
+		elif opcion == "show":
+			muestraColecciones.showcoll('whitelist')
 		elif opcion == "1":
 			while True:
 				ip = input("\tIngresa una IP válida.\t\tVAWAF:>> ")

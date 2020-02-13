@@ -4,6 +4,7 @@
 
 import conf_ini
 import datetime
+import muestraColecciones
 from pymongo import MongoClient
 
 #variables globales
@@ -20,6 +21,10 @@ def desbloquear():
 		#permite regresar con back
 		if ip == "back" or ip == "BACK":
 			break
+		# con el comando show muestra todas las ip contenidas en la base de datos
+		elif ip == "show":
+			muestraColecciones.showcoll('blacklist')
+		#valida la existencia de la ip
 		elif conf_ini.es_IP_valida(ip):
 			if (collection.find_one_and_delete({"ip" : str(ip)}) == None):
 				print("\t\tLa Ip no existe en la BlackList.")
