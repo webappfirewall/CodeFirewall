@@ -52,9 +52,15 @@ def tramos(y, subtitulo, texto, llave):
         passu = collection.find({'name': llave})
         for dato in passu:
             canv.setFont('Helvetica', 8)
-            canv.drawString(50, y, texto + str(dato['valor']) + " - Fecha: " + str(dato['date_at']))
-            y = y - 10
-            y = hojaNueva(y)
+            text =  texto + str(dato['valor']) + " - Fecha: " + str(dato['date_at'])
+            if len(text) > 125:
+                text, text2, y = lineaNueva(text, y)
+                canv.drawString(50, y + 10, text2)
+                canv.drawString(50, y, text)
+            else:
+                canv.drawString(50, y, text)
+                y = y - 10
+                y = hojaNueva(y)
     return y
 
 def tramosip(y, subtitulo, texto, llave):
@@ -68,9 +74,16 @@ def tramosip(y, subtitulo, texto, llave):
         passu = collection.find({'name': llave})
         for dato in passu:
             canv.setFont('Helvetica', 8)
-            canv.drawString(50, y, texto + str(dato['ip']) + " - Descripción: " + dato['descripcion'] + " - Fecha: " + str(dato['date_at']))
-            y = y - 10
-            y = hojaNueva(y)
+            text = texto + str(dato['ip']) + " - Descripción: " + dato['descripcion'] + " - Fecha: " + str(dato['date_at'])
+            if len(text) > 125:
+                text, text2, y = lineaNueva(text, y)
+                canv.drawString(50, y+10, text2)
+                canv.drawString(50, y, text)
+                y -= 10
+            else:
+                canv.drawString(50, y, text)
+                y = y - 10
+                y = hojaNueva(y)
     return y
 
 def hojaNueva(y):
@@ -82,36 +95,33 @@ def hojaNueva(y):
     else:
         return y
 
-def crear(sistema, comunidad, indice):
-    global can
-    can = canvas.Canvas("Reporte" + str(indice) + ".pdf", pagesize=letter)
-    can.setLineWidth(.3)
-    can.setFont('Helvetica', 20)
-    can.drawString(200, 750, 'Reporte de monitoreo SNMP')
-    can.setFont('Helvetica', 12)
-    can.drawString(30, 710, 'Paquetes multicast que ha recibido una interfaz: ')
-    can.drawString(200, 740, str(sistema) + "    " + comunidad)
-    # Dibujamos una imagen (IMAGEN, X,Y, WIDTH, HEIGH)
-    can.drawImage('multicast.png', 100, 550, 397, 130)
-    can.drawString(30, 480, 'Paquetes recibidos exitosamente, entregados a protocolos IPv4: ')
-    # Dibujamos una imagen (IMAGEN, X,Y, WIDTH, HEIGH)
-    can.drawImage('recibidos.png', 100, 310, 397, 130)
-    can.drawString(30, 230, 'Mensajes de respuesta ICMP que ha enviado el agente: ')
-    # Dibujamos una imagen (IMAGEN, X,Y, WIDTH, HEIGH)
-    can.drawImage('respuestaicmp.png', 100, 60, 397, 130)
-    # Salto de pagina
-    can.showPage()
-    can.drawString(30, 750,
-                   'Segmentos enviados, incluyendo los de las conexiones actual pero excluyendo los que contienen solamente')
-    can.drawString(30, 733, 'octetos retransmitidos:')
-    # Dibujamos una imagen (IMAGEN, X,Y, WIDTH, HEIGH)
-    can.drawImage('enviados.png', 100, 550, 397, 130)
-    can.drawString(30, 500,
-                   'Datagramas recibidos que no pudieron ser entregados por cuestiones distintas a la falta de aplicación ')
-    can.drawString(30, 483, 'en el puerto destino: ')
-    # Dibujamos una imagen (IMAGEN, X,Y, WIDTH, HEIGH)
-    can.drawImage('datarecibidos.png', 100, 310, 397, 130)
+def lineaNueva(texto,y):
+    if len(texto) > 125:
+        # Salto de linea
+        y = y - 10
+        aux = ""
+        aux2 = ""
+        for t in range(len(texto)):
+            if t > 125:
+                aux += str(texto[t])
+            else:
+                aux2 += str(texto[t])
+        return aux, aux2, y
+    else:
+        return y
 
+def prueba():
+    global can
+    can = canvas.Canvas("prueba.pdf", pagesize=letter)
+    can.setLineWidth(.3)
+    can.setFont('Helvetica', 8)
+
+    can.drawString(50, 720,'12345612312111111111111111111111111111113333333333333333322222222222222333333223222222222222222222222222222222222222222222133')
+    texto = '1234561231111111111111111111111111111112111111111111111111111111111113333333333333333322222222222222333333223222222222222222222222222222222222222222222133'
+    y = 720
+    texto,y = lineaNueva(texto, y)
+    can.drawString(50, y, texto)
     can.save()
 
 #generarReporte()
+#prueba()
