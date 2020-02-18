@@ -3,7 +3,7 @@
 # By: José María HernAndez Estrada & Jason Adair Rossello Romero
 
 import re
-import datetime
+import getpass
 from pymongo import MongoClient
 
 # variables globales
