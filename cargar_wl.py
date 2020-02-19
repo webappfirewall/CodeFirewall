@@ -18,7 +18,7 @@ def menu():
 
 def cargarwl():
 	db = client['waf']
-	collections = [db['config'],db['whitelist'],db['blacklist'],db['zonas']]
+	collections = [db['config'],db['whitelist'],db['blacklist']]
 	collections_log = db['log']
 
 	while True:
