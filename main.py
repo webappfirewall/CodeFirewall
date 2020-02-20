@@ -43,8 +43,7 @@ def menu():
     print("10. Salir (EXIT).\n")
 
 
-if __name__ == '__main__':
-
+def main():
     # valida si es la configuracion inicial
     primeraVez()
 

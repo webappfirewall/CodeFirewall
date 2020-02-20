@@ -40,7 +40,7 @@ def configuracionInicial():
             print("\t\tUsuario invalido, usa máximo 20 caracteres y mínimo 4.")
 
     while True:
-        password = input("\tIngresa una nueva contraseña\t\t\tVAWAF:>> ")
+        password = getpass.getpass(prompt="\tIngresa una nueva contraseña\t\t\tVAWAF:>> ")
         if es_pass_valida(password):
             break
         else:

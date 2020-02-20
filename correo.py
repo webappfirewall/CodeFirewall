@@ -5,6 +5,7 @@
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import smtplib
+import reporte
 from pymongo import MongoClient
 
 # variables globales
@@ -47,7 +48,7 @@ def send_alert():
     # envia el correo
     mserver.sendmail(mailsender, mailreceip, msg.as_string())
     mserver.quit()
-    print("Correo enviado exitosamente.")
+    #print("\n\n*****Correo enviado exitosamente.*****\n")
 
 
 def checa_envio():
@@ -61,11 +62,14 @@ def checa_envio():
 
         # si escuentra el limite
         if int(limite) >= int(limEstablecido):
+            #actualiza el reporte
+            reporte.generarReporte()
+            #envia la alerta
             send_alert()
     except ValueError:
         print('Error al obtener los datos de limites de ataques.')
 
 
-checa_envio()
+#checa_envio() #es la funcion principal
 # coll_log = db['log']
 # coll_log.find_one_and_replace({'name': 'limite'}, {'name': 'limite', 'valor': '50'})
