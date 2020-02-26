@@ -8,6 +8,7 @@ import cargar_wl
 import desbloqueo
 import modificaciones
 import reporte
+import getpass
 from pymongo import MongoClient
 
 # variables globales
@@ -26,7 +27,29 @@ def primeraVez():
 
 
 def login():
-    pass
+    db = client['waf']
+    collection = db['config']
+
+    while True:
+        usuario = input("Ingresa el usuario:\t\tVAWAF:>>")
+        usr = collection.find_one({'name':'usuario'})
+        psw = collection.find_one({'name': 'password'})
+
+        if usr['valor'] == usuario:
+            print("\tUsuario Correcto.")
+            break
+        else:
+            print("\tWARNING: El usuario ingresado es incorrecto.")
+
+    while True:
+        password = getpass.getpass("Ingresa la contraseña:\t\tVAWAF:>>")
+
+        if psw['valor'] == password:
+            print("Contraseña correcta.")
+            main()
+            break
+        else:
+            print("\tWARNING: La contraseña ingresada es incorrecta.")
 
 
 def menu():
@@ -45,7 +68,7 @@ def menu():
 
 def main():
     # valida si es la configuracion inicial
-    primeraVez()
+    #primeraVez()
 
     while (True):
         # imprime menu

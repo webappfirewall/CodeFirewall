@@ -21,10 +21,11 @@ def menu():
 
 
 def principal():
+    #se crean los objetos hilo
     hiloCorreo = threading.Thread(name='HCorreo',target=hcorreo, daemon=True)
-    hilomain = threading.Thread(name='HMain', target=main.main, daemon=False)
+    hilomain = threading.Thread(name='HMain', target=main.primeraVez, daemon=False)
 
-    # corre el hilo dmonio de correo
+    # corre el hilo demonio de correo
     hiloCorreo.start()
 
     while True:
