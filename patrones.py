@@ -46,16 +46,19 @@ php_keywords = [
     '__TRAIT__'
 ]
 
+
 # Busca select, busca: [CUALQUIER COSA]select from [algo];[CUALQUIER COSA]
 def sql1(cad):
-    sub = bool(re.match(r".*(select\s+\*\s+from\s+)([a-zA-Z]+[a-zA-Z0-9]+)\s*;.*", cad, re.I))
+    sub = bool(re.match(r".*(select\s+(DISTINCT\s+)?(\*|.+\s+)from\s+(ORDER\s+BY\s+.*(ASC|DESC))?).*", cad, re.I))
     print(sub)
     return sub
 
 
 # Busca: [CUALQUIER COSA]SELECT * FROM [algo] WHERE [ALGO][CUALQUIER COSA]
 def sql3(cad):
-    sub = bool(re.match(r".*\s*SELECT\s+\*\s+FROM\s+[a-zA-z]+[a-zA-z1-9]+\s+WHERE\s+[a-zA-z]+[a-zA-z1-9]+.*", cad, re.I))
+    sub = bool(
+        re.match(r".*\s*SELECT\s+(DISTINCT\s+)?(\*|.+\s+)FROM\s+.+\s+WHERE\s+(ORDER\s+BY\s+.*(ASC|DESC))?.+.*", cad,
+                 re.I))
     print(sub)
     return sub
 
@@ -81,8 +84,89 @@ def sql5(cad):
     return sub
 
 
-# sql1('SELECT * from monas;')
+# Busca update: [cualquier cosa] UPDATE [cualquier cosa] SET [cualquier cosa] WHERE
+def sql6(cad):
+    sub = bool(re.match(r".*UPDATE\s+.*\s+SET\s+.*=.*(WHERE\s+)?.*", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql7(cad):
+    sub = bool(re.match(r".*INSERT\s+INTO\s+.*(\(.*\)\s+)?VALUES\s+\(.*\).*", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql8(cad):
+    sub = bool(re.match(r".*DELETE\s+FROM\s+.+\s+(WHERE\s+)?.*", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql9(cad):
+    sub = bool(re.match(r".*SELECT\s+.+\s+FROM\s+.+\s+(UNION\s+|UNION\s+ALL\s+)SELECT\s+.+\s+FROM\s+.*", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql10(cad):
+    sub = bool(re.match(r".*INSERT\s+INTO\s+.*(\(.*\)\s+)?SELECT\s+.*\s+FROM\s+.*", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql11(cad):
+    sub = bool(re.match(r".*(CREATE\s+PROCEDURE\s.+\s+AS\s+|EXEC\s+).*", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql12(cad):
+    sub = bool(re.match(r".*(CREATE|DROP|BACKUP)\s+DATABASE\s+.*", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql13(cad):
+    sub = bool(re.match(r".*CREATE\s+TABLE\s+.+\(.+\).*", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql14(cad):
+    sub = bool(re.match(r".*(DROP|TRUNCATE)\s+TABLE\s+.+\s", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql15(cad):
+    sub = bool(re.match(r".*ALTER\s+TABLE\s.+\s(ADD|DROP\sCOLUMN|ALTER\sCOLUMN|MODIFY\sCOLUMN|MODIFY)\s+.*", cad, re.I))
+    print(sub)
+    return sub
+
+
+def sql16(cad):
+    sub = bool(re.match(r".*(CREATE|DROP)\s+(UNIQUE\s+)?INDEX\s.+(ON\s)?.+", cad, re.I))
+    print(sub)
+    return sub
+
+
+# expresiones regulares para detectar xss
+def sql17(cad):
+    sub = bool(re.match(r".*<script.*>.*</script>.*", cad, re.I))
+    print(sub)
+    return sub
+
+
+# sql1('SELECT OrderID, Quantity, CASE WHEN Quantity > 30 THEN "The quantity is greater than 30" WHEN Quantity = 30 THEN "The quantity is 30" ELSE "The quantity is under 30" END AS QuantityText FROM OrderDetails;')
 # sql2("Alicia'; DROP TABLE usuarios; SELECT * FROM datos WHERE nombre LIKE '%")
-# sql3('consulta := "SELECT * FROM usuarios WHERE user')
-#sql4("' and 1 = 1'")
-sql5('; SELECT * FROM information_schema.tables WHERE table_name! = “')
+# sql3('SELECT * FROM Users WHERE UserId = 105 OR 1=1;')
+# sql4("' and 1 = 1")
+# sql5('; SELECT * FROM information_schema.tables WHERE table_name! = “')
+# sql6('UPDATE Customers SET Contacts = "alfred", city= "frank" WHERE customerid = 1; ')
+# sql10("INSERT INTO Customers (CustomerName, City, Country) SELECT SupplierName, City, Country FROM Suppliers WHERE perro = gato;")
+# sql8('DELETE FROM Customers SET Contacts WHERE customerid = 1;')
+# sql9("SELECT perro FROM Customers UNION  SELECT perro FROM Customers;")
+# sql11('CREATE PROCEDURE SelectAllCustomers AS SELECT * FROM Customers GO;')
+# sql13('CREATE TABLE Persons ( PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));')
+# sql17('<script type="text/javascript"> //<![CDATA[ var i = 10; if (i < 5) {// some code } //]]></script>')

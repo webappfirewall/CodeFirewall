@@ -4,6 +4,7 @@
 
 from pymongo import MongoClient
 from patrones import sql_keywords
+from patrones import *
 
 # variables globales
 client = MongoClient('127.0.0.1', 27017)
@@ -50,11 +51,16 @@ def buscaenblack(ip):
 
 def analizador(datos):
     # convierte de ascci a caracter y guarada en la misma posicion de la lista
+    tramastring = ""
     for n in range(len(datos)):
         if datos[n][0] == '%':
             sincaracter = datos[n].replace('%', '')
             datos[n] = (b''.fromhex(sincaracter)).decode()
-    print(datos)
+            tramastring = tramastring + str((b''.fromhex(sincaracter)).decode()) + " "
+        else:
+            tramastring = tramastring + str(datos[n]) + " "
+    tramastring = tramastring.rstrip()
+    print(tramastring)
 
     # busca los patrones
     for dato in datos:
