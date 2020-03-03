@@ -16,20 +16,20 @@ mailsender = "correowaf@gmail.com"
 mailreceip = "chemahernandez013@gmail.com"
 mailserver = 'smtp.gmail.com: 587'
 password = 'Global.nix12345'
-subject = 'Alerta Firewall, limite de ataques excedido.'
+subject = 'Alerta Firewall, límite de ataques excedido.'
 
 
 def send_alert():
     global mailreceip
-    #extrae el correo de las configuraciones iniciales
+    # extrae el correo de las configuraciones iniciales
     try:
         coll_conf = db['config']
-        datosmail = coll_conf.find_one({'name':'email'})
+        datosmail = coll_conf.find_one({'name': 'email'})
         mailreceip = datosmail['valor']
     except ValueError:
         print('Error al obtener el correo')
 
-    #inicializa parametros
+    # inicializa parametros
     msg = MIMEMultipart()
     msg['Subject'] = subject
     msg['From'] = mailsender
@@ -48,7 +48,7 @@ def send_alert():
     # envia el correo
     mserver.sendmail(mailsender, mailreceip, msg.as_string())
     mserver.quit()
-    #print("\n\n*****Correo enviado exitosamente.*****\n")
+    # print("\n\n*****Correo enviado exitosamente.*****\n")
 
 
 def checa_envio():
@@ -65,14 +65,16 @@ def checa_envio():
 
         # si escuentra el limite
         if int(limite) >= int(limEstablecido):
-            #actualiza el reporte
+            # actualiza el reporte
             reporte.generarReporte()
-            #envia la alerta
+            # envia la alerta
             send_alert()
+            # borra el contador de ataques
+            collection.find_one_and_replace({'name': 'limite'}, {'name': 'limite', 'valor': '0'})
     except ValueError:
         print('Error al obtener los datos de limites de ataques.')
 
 
-#checa_envio() #es la funcion principal
+# checa_envio() #es la funcion principal
 # coll_log = db['log']
 # coll_log.find_one_and_replace({'name': 'limite'}, {'name': 'limite', 'valor': '50'})

@@ -7,7 +7,6 @@ from pymongo import MongoClient
 import conf_ini
 import duplicidad_db
 import patrones
-import threading
 import datetime
 import concurrent.futures
 
@@ -189,6 +188,13 @@ def guardaBlack(ips):
         # busca y borra en caso de estar en la wl
         duplicidad_db.buscaBorra(ips, 'whitelist')
 
+def cuentataques():
+    #esta funcion aumenta el contador de ataques en la coleccion log en una unidad, al encontrar un ataque
+    collection = db['log']
+    documento = collection.find_one({'name': 'limite'})
+    limite = int(documento['valor']) + 1
+    collection.find_one_and_replace({'name': 'limite'}, {'name': 'limite', 'valor': limite})
+
 
 def main():
     trama, ip = extrae_trama()
@@ -212,9 +218,11 @@ def main():
                     collection = db['trama']
                     collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1','tipo': tipo})
                     guardaBlack(ip)
+                    cuentataques()
 
 
-main()
+# main()
+# cuentataques()
 # perro = extrae_datos('username=%27admin+%40%3D&password=admin&Login=Login','post')
 # perro = extrae_datos('/dvwa/vulnerabilities/sqli/?id=%27+or+1+%3D+%27+1&Submit=Submit', 'get')
 # print(perro)
