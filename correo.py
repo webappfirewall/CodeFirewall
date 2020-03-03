@@ -55,8 +55,11 @@ def checa_envio():
     try:
         collection = db['log']
         coll_cong = db['config']
-        nataques = coll_cong.find_one({"name": "numataques"})
-        limEstablecido = nataques['valor']
+        if coll_cong.find_one({"name": "numataques"}) != None:
+            nataques = coll_cong.find_one({"name": "numataques"})
+            limEstablecido = nataques['valor']
+        else:
+            limEstablecido = 250
         documento = collection.find_one({'name': 'limite'})
         limite = documento['valor']
 

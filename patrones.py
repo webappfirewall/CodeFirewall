@@ -50,118 +50,117 @@ php_keywords = [
 # Busca select, busca: [CUALQUIER COSA]select from [algo];[CUALQUIER COSA]
 def sql1(cad):
     sub = bool(re.match(r".*(select\s+(DISTINCT\s+)?(\*|.+\s+)from\s+(ORDER\s+BY\s+.*(ASC|DESC))?).*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 # Busca: [CUALQUIER COSA]SELECT * FROM [algo] WHERE [ALGO][CUALQUIER COSA]
 def sql3(cad):
     sub = bool(
-        re.match(r".*\s*SELECT\s+(DISTINCT\s+)?(\*|.+\s+)FROM\s+.+\s+WHERE\s+(ORDER\s+BY\s+.*(ASC|DESC))?.+.*", cad,
-                 re.I))
-    print(sub)
+        re.match(r".*\s*SELECT\s+(DISTINCT\s+)?(\*|.+\s+)FROM\s+.+\s+WHERE\s+(ORDER\s+BY\s+.*(ASC|DESC))?.+.*", cad,re.I))
+    #print(sub)
     return sub
 
 
 # Busca borrado de tablas busca: [CUALQUIER COSA]'; DROP TABLE [algo];[CUALQUIER COSA]
 def sql2(cad):
     sub = bool(re.match(r".*';\s*DROP\s+TABLE\s+[a-zA-z]+[a-zA-z1-9]+\s*.*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 # Busca condiconales: [CUALQUIER COSA]' or|and [algo] = [algo][CUALQUIER COSA]
 def sql4(cad):
-    sub = bool(re.match(r".*'*\s*(OR|AND)\s*.*=.*'*", cad, re.I))
-    print(sub)
+    sub = bool(re.match(r".*(OR|AND)\s+.*=.*", cad, re.I))
+    #print(sub)
     return sub
 
 
 # Busca condiconales: [CUALQUIER COSA]SELECT * FROM [CUALQUIER COSA] WHERE [CUALQUIER COSA]
 def sql5(cad):
     sub = bool(re.match(r".*SELECT\s+\*\s+FROM\s+.+\s*WHERE\s+.*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 # Busca update: [cualquier cosa] UPDATE [cualquier cosa] SET [cualquier cosa] WHERE
 def sql6(cad):
     sub = bool(re.match(r".*UPDATE\s+.*\s+SET\s+.*=.*(WHERE\s+)?.*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql7(cad):
     sub = bool(re.match(r".*INSERT\s+INTO\s+.*(\(.*\)\s+)?VALUES\s+\(.*\).*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql8(cad):
     sub = bool(re.match(r".*DELETE\s+FROM\s+.+\s+(WHERE\s+)?.*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql9(cad):
     sub = bool(re.match(r".*SELECT\s+.+\s+FROM\s+.+\s+(UNION\s+|UNION\s+ALL\s+)SELECT\s+.+\s+FROM\s+.*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql10(cad):
     sub = bool(re.match(r".*INSERT\s+INTO\s+.*(\(.*\)\s+)?SELECT\s+.*\s+FROM\s+.*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql11(cad):
     sub = bool(re.match(r".*(CREATE\s+PROCEDURE\s.+\s+AS\s+|EXEC\s+).*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql12(cad):
     sub = bool(re.match(r".*(CREATE|DROP|BACKUP)\s+DATABASE\s+.*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql13(cad):
     sub = bool(re.match(r".*CREATE\s+TABLE\s+.+\(.+\).*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql14(cad):
     sub = bool(re.match(r".*(DROP|TRUNCATE)\s+TABLE\s+.+\s", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql15(cad):
     sub = bool(re.match(r".*ALTER\s+TABLE\s.+\s(ADD|DROP\sCOLUMN|ALTER\sCOLUMN|MODIFY\sCOLUMN|MODIFY)\s+.*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 def sql16(cad):
     sub = bool(re.match(r".*(CREATE|DROP)\s+(UNIQUE\s+)?INDEX\s.+(ON\s)?.+", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 # expresiones regulares para detectar xss
 def sql17(cad):
     sub = bool(re.match(r".*<script.*>.*</script>.*", cad, re.I))
-    print(sub)
+    #print(sub)
     return sub
 
 
 # sql1('SELECT OrderID, Quantity, CASE WHEN Quantity > 30 THEN "The quantity is greater than 30" WHEN Quantity = 30 THEN "The quantity is 30" ELSE "The quantity is under 30" END AS QuantityText FROM OrderDetails;')
 # sql2("Alicia'; DROP TABLE usuarios; SELECT * FROM datos WHERE nombre LIKE '%")
 # sql3('SELECT * FROM Users WHERE UserId = 105 OR 1=1;')
-# sql4("' and 1 = 1")
+#sql4("' and 1 = ' 1")
 # sql5('; SELECT * FROM information_schema.tables WHERE table_name! = “')
 # sql6('UPDATE Customers SET Contacts = "alfred", city= "frank" WHERE customerid = 1; ')
 # sql10("INSERT INTO Customers (CustomerName, City, Country) SELECT SupplierName, City, Country FROM Suppliers WHERE perro = gato;")
