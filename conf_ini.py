@@ -88,13 +88,14 @@ def configuracionInicial():
     collection.insert_one({"name": "numataques", "valor": 500})
     collection.insert_one({"name": "cuarentena", "valor": un_dia})
     collection.insert_one({"name": "tiempobl", "valor": un_dia})
+    collection.insert_one({"name": "limite", "valor":"0"})
 
     print("\tDatos guardados exitosamente.")
 
     # impresion de los datos
-    results = collection.find()
-    for r in results:
-        print("\t", r)
+    #results = collection.find()
+    #for r in results:
+    #    print("\t", r)
 
 # if  __name__ ==  '__main__':
 #	configuracionInicial()

@@ -56,14 +56,13 @@ def send_alert():
 
 def checa_envio():
     try:
-        collection = db['log']
-        coll_cong = db['config']
-        if coll_cong.find_one({"name": "numataques"}) != None:
-            nataques = coll_cong.find_one({"name": "numataques"})
+        coll_conf = db['config']
+        if coll_conf.find_one({"name": "numataques"}) != None:
+            nataques = coll_conf.find_one({"name": "numataques"})
             limEstablecido = nataques['valor']
         else:
             limEstablecido = 250
-        documento = collection.find_one({'name': 'limite'})
+        documento = coll_conf.find_one({'name': 'limite'})
         limite = documento['valor']
 
         # si escuentra el limite
@@ -73,7 +72,7 @@ def checa_envio():
             # envia la alerta
             send_alert()
             # borra el contador de ataques
-            collection.find_one_and_replace({'name': 'limite'}, {'name': 'limite', 'valor': '0'})
+            coll_conf.find_one_and_replace({'name': 'limite'}, {'name': 'limite', 'valor': '0'})
     except ValueError:
         print('Error al obtener los datos de limites de ataques.')
 
