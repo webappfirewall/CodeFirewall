@@ -43,10 +43,6 @@ def principal():
     wafService = threading.Thread(name='wafService', target=hwaf, daemon=True)
     hilomain = threading.Thread(name='HMain', target=main.primeraVez, daemon=False)
 
-    # corre el hilo demonio de correo
-    hiloCorreo.start()
-    wafService.start()
-
     while True:
         #imprime el menu
         menu()
@@ -54,6 +50,9 @@ def principal():
 
         if opcion == "1":
             main.primeraVez()
+            # corre los hilos demonio
+            hiloCorreo.start()
+            wafService.start()
         elif opcion == "2" or opcion == 'exit' or opcion == 'EXIT':
             break
         else:
