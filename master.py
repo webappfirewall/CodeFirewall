@@ -57,6 +57,7 @@ def principal():
                 wafService.start()
                 banderaH = 1
         elif opcion == "2" or opcion == 'exit' or opcion == 'EXIT':
+            print("Good bye baby.")
             break
         else:
             print('Opcion invalida.')

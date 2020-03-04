@@ -144,7 +144,6 @@ def main():
             print("\nGuardado.")
 
         elif opcionMenu == "EXIT" or opcionMenu == "exit" or opcionMenu == "10":
-            print("Good bye baby.")
             break
 
         else:
