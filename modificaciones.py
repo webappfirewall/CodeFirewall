@@ -2,14 +2,16 @@
 # -*- coding: utf-8 -*-
 # By: José María HernAndez Estrada & Jason Adair Rossello Romero
 
+import urllib.parse
 import conf_ini
-import sys
 import getpass
 import datetime
 from pymongo import MongoClient
 
 # variables globales
-client = MongoClient('127.0.0.1', 27017)
+username = urllib.parse.quote_plus('@dm1n')
+passwor = urllib.parse.quote_plus('Qw3rt&12345')
+client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
 db = client['waf']
 collection = db['config']
 collection_log = db['log']

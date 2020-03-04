@@ -4,10 +4,16 @@
 
 import threading
 import time
+import urllib.parse
 import correo
 import main
 import analizador
 from pymongo import MongoClient
+
+# Variables globales
+username = urllib.parse.quote_plus('@dm1n')
+passwor = urllib.parse.quote_plus('Qw3rt&12345')
+client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
 
 
 def hcorreo():
@@ -17,7 +23,6 @@ def hcorreo():
 
 
 def hwaf():
-    client = MongoClient('127.0.0.1', 27017)
     db = client['waf']
     collection = db['trama']
     while True:

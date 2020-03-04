@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # By: José María Hernández Estrada & Jason Adair Rossello Romero
 
+import urllib.parse
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import smtplib
@@ -9,8 +10,9 @@ import reporte
 from pymongo import MongoClient
 
 # variables globales
-client = MongoClient('127.0.0.1', 27017)
-db = client['waf']
+username = urllib.parse.quote_plus('@dm1n')
+passwor = urllib.parse.quote_plus('Qw3rt&12345')
+client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
 
 mailsender = "correowaf@gmail.com"
 mailreceip = "chemahernandez013@gmail.com"

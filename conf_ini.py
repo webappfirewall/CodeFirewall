@@ -4,11 +4,13 @@
 
 import re
 import getpass
+import urllib.parse
 from pymongo import MongoClient
 
 # variables globales
-Mongo_URI = 'mongodb://localhost'
-client = MongoClient(Mongo_URI)
+username = urllib.parse.quote_plus('@dm1n')
+passwor = urllib.parse.quote_plus('Qw3rt&12345')
+client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
 
 
 def es_correo_valido(correo):

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # By: José María Hernández Estrada & Jason Adair Rossello Romero
 
+import urllib.parse
 import conf_ini
 import cargar_bl
 import cargar_wl
@@ -12,8 +13,9 @@ import getpass
 from pymongo import MongoClient
 
 # variables globales
-Mongo_URI = 'mongodb://localhost'
-client = MongoClient(Mongo_URI)
+username = urllib.parse.quote_plus('@dm1n')
+passwor = urllib.parse.quote_plus('Qw3rt&12345')
+client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
 
 
 def primeraVez():
