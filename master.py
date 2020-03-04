@@ -42,17 +42,20 @@ def principal():
     hiloCorreo = threading.Thread(name='HCorreo',target=hcorreo, daemon=True)
     wafService = threading.Thread(name='wafService', target=hwaf, daemon=True)
     hilomain = threading.Thread(name='HMain', target=main.primeraVez, daemon=False)
+    banderaH = 0
 
     while True:
-        #imprime el menu
+        # imprime el menu
         menu()
         opcion = input("\nVAWAF:>> ")
 
         if opcion == "1":
             main.primeraVez()
             # corre los hilos demonio
-            hiloCorreo.start()
-            wafService.start()
+            if banderaH == 0:
+                hiloCorreo.start()
+                wafService.start()
+                banderaH = 1
         elif opcion == "2" or opcion == 'exit' or opcion == 'EXIT':
             break
         else:
