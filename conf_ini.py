@@ -72,6 +72,9 @@ def configuracionInicial():
             break
         else:
             print("\t\tCorreo invalido, intenta otra vez.")
+
+    # pide la url
+    url = input("\tIngresa la URL del sitio a proteger:\t\tVAWAF:>> ")
     #	print(usuario, " - ", password, " - ", email, " - ", ip, " - ", puerto)
 
     # guardar los datos en mongo db
@@ -84,6 +87,7 @@ def configuracionInicial():
     collection.insert_one({"name": "email", "valor": str(email)})
     collection.insert_one({"name": "puerto", "valor": str(puerto)})
     collection.insert_one({"name": "ip", "valor": str(ip)})
+    collection.insert_one({"name": "url", "valor": str(url)})
     # documentos precargados
     collection.insert_one({"name": "numataques", "valor": 500})
     collection.insert_one({"name": "cuarentena", "valor": un_dia})

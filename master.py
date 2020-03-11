@@ -25,6 +25,7 @@ def hcorreo():
 def hwaf():
     db = client['waf']
     collection = db['trama']
+    #corre infinitamente el analizador de patrones
     while True:
         time.sleep(5) #borrar el retardo
         if collection.count_documents({}) > 0:
