@@ -48,7 +48,7 @@ def configuracionInicial():
             print(
                 "\t\tContraseña invalida, la contraseña debe tener al entre 8 y 30 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un caracter no alfanumérico..")
 
-    while True:
+    """while True:
         datos = input("\tIngresa IP:Puerto (1.1.1.1:8000)\t\tVAWAF:>> ")
 
         # tratado de datos ip/puerto
@@ -64,7 +64,7 @@ def configuracionInicial():
             break
         else:
             print("\t\tDirecion ip invalido o puerto invalido, intenta otra vez.")
-
+"""
     while True:
         email = input("\tIngresa un correo electrónico válido:\t\tVAWAF:>> ")
         if (es_correo_valido(email)):
@@ -84,8 +84,8 @@ def configuracionInicial():
     collection.insert_one({"name": "usuario", "valor": str(usuario)})
     collection.insert_one({"name": "password", "valor": str(password)})
     collection.insert_one({"name": "email", "valor": str(email)})
-    collection.insert_one({"name": "puerto", "valor": str(puerto)})
-    collection.insert_one({"name": "ip", "valor": str(ip)})
+    #collection.insert_one({"name": "puerto", "valor": str(puerto)})
+    #collection.insert_one({"name": "ip", "valor": str(ip)})
     collection.insert_one({"name": "url", "valor": str(url)})
     # documentos precargados
     collection.insert_one({"name": "numataques", "valor": 500})
