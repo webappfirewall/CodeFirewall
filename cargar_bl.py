@@ -49,17 +49,15 @@ def cargar_bl():
 		elif (len(porguion) == 1 and len(porcoma) > 1):
 			aux = []
 			error = False
-			print(porcoma)
 			for x in porcoma:
-				print(x)
 				if (aux.count(x) < 1 and conf_ini.es_IP_valida(x)):
 					aux.append(x)
 				elif (aux.count(x) < 1 and conf_ini.es_IP_valida(x) == False):
-					print("\tIps introducidas incorrectamente...coma1\nPulse una tecla para continuar.")
+					print("\tIps introducidas incorrectamente...\nPulse una tecla para continuar.")
 					error = True
 					break
 				elif (not(aux.count(x) < 1) and not(conf_ini.es_IP_valida(x))):
-					print("\tIps introducidas incorrectamente...coma2\nPulse una tecla para continuar.")
+					print("\tIps introducidas incorrectamente...\nPulse una tecla para continuar.")
 					error = True
 					break
 			#ips validades sin errores, se procede a guardar en db
