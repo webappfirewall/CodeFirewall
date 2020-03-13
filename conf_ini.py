@@ -6,11 +6,10 @@ import re
 import getpass
 import urllib.parse
 from pymongo import MongoClient
+import conexiondb
 
-# variables globales
-username = urllib.parse.quote_plus('@dm1n')
-passwor = urllib.parse.quote_plus('Qw3rt&.12345')
-client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
+# Variables globales
+client = conexiondb.client
 
 
 def es_correo_valido(correo):
@@ -49,7 +48,7 @@ def configuracionInicial():
             print(
                 "\t\tContraseña invalida, la contraseña debe tener al entre 8 y 30 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un caracter no alfanumérico..")
 
-    while True:
+    """while True:
         datos = input("\tIngresa IP:Puerto (1.1.1.1:8000)\t\tVAWAF:>> ")
 
         # tratado de datos ip/puerto
@@ -65,7 +64,7 @@ def configuracionInicial():
             break
         else:
             print("\t\tDirecion ip invalido o puerto invalido, intenta otra vez.")
-
+"""
     while True:
         email = input("\tIngresa un correo electrónico válido:\t\tVAWAF:>> ")
         if (es_correo_valido(email)):
@@ -80,14 +79,15 @@ def configuracionInicial():
     # guardar los datos en mongo db
     db = client['waf']
     collection = db['config']
+    col_sites = db['sites']
     un_dia = 1
 
     collection.insert_one({"name": "usuario", "valor": str(usuario)})
     collection.insert_one({"name": "password", "valor": str(password)})
     collection.insert_one({"name": "email", "valor": str(email)})
-    collection.insert_one({"name": "puerto", "valor": str(puerto)})
-    collection.insert_one({"name": "ip", "valor": str(ip)})
-    collection.insert_one({"name": "url", "valor": str(url)})
+    #collection.insert_one({"name": "puerto", "valor": str(puerto)})
+    #collection.insert_one({"name": "ip", "valor": str(ip)})
+    col_sites.insert_one({"url":str(url),'ip':'192.168.17.149'})
     # documentos precargados
     collection.insert_one({"name": "numataques", "valor": 500})
     collection.insert_one({"name": "cuarentena", "valor": un_dia})
