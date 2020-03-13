@@ -50,13 +50,13 @@ def cargar_bl():
 			aux = []
 			error = False
 			for x in porcoma:
-				if (aux.count(x) < 1 and conf_ini.es_IP_valida(x)):
+				if (aux.count(x) < 1 and not(conf_ini.es_IP_valida(x))):
 					aux.append(x)
-				elif (aux.count(x) < 1 and conf_ini.es_IP_valida(x) == False):
+				elif (aux.count(x) < 1 and conf_ini.es_IP_valida(x) == True):
 					print("\tIps introducidas incorrectamente...\nPulse una tecla para continuar.")
 					error = True
 					break
-				elif (not(aux.count(x) < 1) and not(conf_ini.es_IP_valida(x))):
+				elif (not(aux.count(x) < 1) and conf_ini.es_IP_valida(x)):
 					print("\tIps introducidas incorrectamente...\nPulse una tecla para continuar.")
 					error = True
 					break
