@@ -50,12 +50,12 @@ def principal():
         opcion = input("\nVAWAF:>> ")
 
         if opcion == "1":
-            main.primeraVez()
             # corre los hilos demonio
             if banderaH == 0:
                 hiloCorreo.start()
                 wafService.start()
                 banderaH = 1
+            main.primeraVez()
         elif opcion == "2" or opcion == 'exit' or opcion == 'EXIT':
             print("Good bye baby.")
             break

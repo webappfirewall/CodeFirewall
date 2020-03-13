@@ -177,7 +177,7 @@ def analizador(datos):
         return_value = future.result()
         resultados.append(return_value)
 
-    print(resultados)
+    #print(resultados)
     return resultados
 
 
@@ -204,12 +204,12 @@ def main():
     #la ip no esta analizada
     colecion = collection.find_one({'name':'trama'})
     status = colecion['analizado']
-    if (not(status)):
+    if (status == 'False'):
         # la ip esta en la black y debe ser bloqueada
         if (buscaenblack(ip)):
             documento = collection.find_one({'name': 'trama'})
             tipo = documento['tipo']
-            collection.find_one_and_replace({'name': 'trama'}, {'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1', 'tipo': tipo, 'analizado':True})
+            collection.find_one_and_replace({'name': 'trama'}, {'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1', 'tipo': tipo, 'analizado':'True'})
         # la ip no esta en la black list y se debe ejecutar el analizador de patrones
         else:
             documento = collection.find_one({'name': 'trama'})
@@ -222,7 +222,7 @@ def main():
                 for r in resultados:
                     if r == True:
                         collection = db['trama']
-                        collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1','tipo': tipo, 'analizado':True})
+                        collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1','tipo': tipo, 'analizado':'True'})
                         guardaBlack(ip)
                         cuentataques()
 

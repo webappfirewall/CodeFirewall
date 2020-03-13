@@ -61,7 +61,8 @@ def checa_envio():
             limEstablecido = nataques['valor']
         else:
             limEstablecido = 250
-        documento = coll_conf.find_one({'name': 'limite'})
+            coll_conf.insert_one({'name':'limite','valor':0})
+        documento = coll_conf.find_one({'name':'limite'})
         limite = documento['valor']
 
         # si escuentra el limite
