@@ -79,6 +79,7 @@ def configuracionInicial():
     # guardar los datos en mongo db
     db = client['waf']
     collection = db['config']
+    col_sites = db['sites']
     un_dia = 1
 
     collection.insert_one({"name": "usuario", "valor": str(usuario)})
@@ -86,7 +87,8 @@ def configuracionInicial():
     collection.insert_one({"name": "email", "valor": str(email)})
     #collection.insert_one({"name": "puerto", "valor": str(puerto)})
     #collection.insert_one({"name": "ip", "valor": str(ip)})
-    collection.insert_one({"name": "url", "valor": str(url)})
+    #col_sites.insert_one({"url":str(url),'ip':'192.168.17.149'})
+    col_sites.insert_one({"url": str(url), 'ip': '127.0.0.1'})
     # documentos precargados
     collection.insert_one({"name": "numataques", "valor": 500})
     collection.insert_one({"name": "cuarentena", "valor": un_dia})

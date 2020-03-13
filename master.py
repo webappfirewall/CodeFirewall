@@ -55,7 +55,8 @@ def principal():
                 hiloCorreo.start()
                 wafService.start()
                 banderaH = 1
-            main.primeraVez()
+            else:
+                main.primeraVez()
         elif opcion == "2" or opcion == 'exit' or opcion == 'EXIT':
             print("Good bye baby.")
             break
