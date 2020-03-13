@@ -31,7 +31,7 @@ def cargar_bl():
 		elif ips == "show":
 			muestraColecciones.showcoll('blacklist')
 #es una unica ip
-		elif (len(porguion) == 1 and len(porcoma)):
+		elif (len(porguion) == 1 and len(porcoma) == 1):
 			if (conf_ini.es_IP_valida(ips) and duplicidad_db.checar_duplicidad('blacklist', ips)):
 				ahora = datetime.datetime.now()	#obtiene fecha y hora actual
 				collections[2].insert_one({"ip":ips, "agent":"","ataque":"precargada", "date_at":ahora})
@@ -49,15 +49,17 @@ def cargar_bl():
 		elif (len(porguion) == 1 and len(porcoma) > 1):
 			aux = []
 			error = False
+			print(porcoma)
 			for x in porcoma:
-				if (aux.count(x) < 1 and not(conf_ini.es_IP_valida(x))):
+				print(x)
+				if (aux.count(x) < 1 and conf_ini.es_IP_valida(x)):
 					aux.append(x)
-				elif (aux.count(x) < 1 and conf_ini.es_IP_valida(x) == True):
-					print("\tIps introducidas incorrectamente...\nPulse una tecla para continuar.")
+				elif (aux.count(x) < 1 and conf_ini.es_IP_valida(x) == False):
+					print("\tIps introducidas incorrectamente...coma1\nPulse una tecla para continuar.")
 					error = True
 					break
-				elif (not(aux.count(x) < 1) and conf_ini.es_IP_valida(x)):
-					print("\tIps introducidas incorrectamente...\nPulse una tecla para continuar.")
+				elif (not(aux.count(x) < 1) and not(conf_ini.es_IP_valida(x))):
+					print("\tIps introducidas incorrectamente...coma2\nPulse una tecla para continuar.")
 					error = True
 					break
 			#ips validades sin errores, se procede a guardar en db
