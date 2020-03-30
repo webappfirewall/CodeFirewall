@@ -192,7 +192,7 @@ def guardaBlack(ips):
 
 def cuentataques():
     #esta funcion aumenta el contador de ataques en la coleccion log en una unidad, al encontrar un ataque
-    collection = db['log']
+    collection = db['config']
     documento = collection.find_one({'name': 'limite'})
     limite = int(documento['valor']) + 1
     collection.find_one_and_replace({'name': 'limite'}, {'name': 'limite', 'valor': limite})
@@ -227,6 +227,7 @@ def main():
                         guardaBlack(ip)
                         cuentataques()
                         flag = "1"
+            #bandera para cuando no tiene ataques, y modificar el analizado a True
             if flag == "0":
                 collection = db['trama']
                 collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '0','tipo': tipo, 'analizado': 'True'})
