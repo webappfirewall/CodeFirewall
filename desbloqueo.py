@@ -7,11 +7,10 @@ import conf_ini
 import datetime
 import muestraColecciones
 from pymongo import MongoClient
+import conexiondb
 
-#variables globales
-username = urllib.parse.quote_plus('@dm1n')
-passwor = urllib.parse.quote_plus('Qw3rt&.12345')
-client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
+# Variables globales
+client = conexiondb.client
 
 def desbloquear():
 	db = client['waf']

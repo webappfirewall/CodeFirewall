@@ -9,11 +9,10 @@ import correo
 import main
 import analizador
 from pymongo import MongoClient
+import conexiondb
 
 # Variables globales
-username = urllib.parse.quote_plus('@dm1n')
-passwor = urllib.parse.quote_plus('Qw3rt&.12345')
-client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
+client = conexiondb.client
 
 
 def hcorreo():
@@ -51,12 +50,12 @@ def principal():
         opcion = input("\nVAWAF:>> ")
 
         if opcion == "1":
-            main.primeraVez()
             # corre los hilos demonio
             if banderaH == 0:
                 hiloCorreo.start()
                 wafService.start()
                 banderaH = 1
+            main.primeraVez()
         elif opcion == "2" or opcion == 'exit' or opcion == 'EXIT':
             print("Good bye baby.")
             break

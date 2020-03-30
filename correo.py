@@ -8,11 +8,10 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 import reporte
 from pymongo import MongoClient
+import conexiondb
 
-# variables globales
-username = urllib.parse.quote_plus('@dm1n')
-passwor = urllib.parse.quote_plus('Qw3rt&.12345')
-client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
+# Variables globales
+client = conexiondb.client
 db = client['waf']
 
 mailsender = "correowaf@gmail.com"
@@ -62,7 +61,8 @@ def checa_envio():
             limEstablecido = nataques['valor']
         else:
             limEstablecido = 250
-        documento = coll_conf.find_one({'name': 'limite'})
+            coll_conf.insert_one({'name':'limite','valor':0})
+        documento = coll_conf.find_one({'name':'limite'})
         limite = documento['valor']
 
         # si escuentra el limite

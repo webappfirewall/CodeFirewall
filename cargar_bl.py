@@ -7,11 +7,10 @@ import datetime
 import duplicidad_db
 import muestraColecciones
 from pymongo import MongoClient
+import conexiondb
 
-#variables globales
-username = urllib.parse.quote_plus('@dm1n')
-passwor = urllib.parse.quote_plus('Qw3rt&.12345')
-client = MongoClient('mongodb://%s:%s@10.0.2.4' % (username, passwor))
+# Variables globales
+client = conexiondb.client
 
 def cargar_bl():
 	db = client['waf']
@@ -32,7 +31,7 @@ def cargar_bl():
 		elif ips == "show":
 			muestraColecciones.showcoll('blacklist')
 #es una unica ip
-		elif (len(porguion) == 1 and len(porcoma)):
+		elif (len(porguion) == 1 and len(porcoma) == 1):
 			if (conf_ini.es_IP_valida(ips) and duplicidad_db.checar_duplicidad('blacklist', ips)):
 				ahora = datetime.datetime.now()	#obtiene fecha y hora actual
 				collections[2].insert_one({"ip":ips, "agent":"","ataque":"precargada", "date_at":ahora})
