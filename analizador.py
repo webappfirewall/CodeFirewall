@@ -199,6 +199,7 @@ def cuentataques():
 
 
 def main():
+    flag = "0"
     trama, ip = extrae_trama()
     collection = db['trama']
     #la ip no esta analizada
@@ -225,6 +226,10 @@ def main():
                         collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1','tipo': tipo, 'analizado':'True'})
                         guardaBlack(ip)
                         cuentataques()
+                        flag = "1"
+            if flag == "0":
+                collection = db['trama']
+                collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '0','tipo': tipo, 'analizado': 'True'})
 
 
 # main()
