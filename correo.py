@@ -61,8 +61,8 @@ def checa_envio():
             limEstablecido = nataques['valor']
         else:
             limEstablecido = 250
-            coll_conf.insert_one({'name':'limite','valor':0})
-        documento = coll_conf.find_one({'name':'limite'})
+            coll_conf.insert_one({'name': 'limite', 'valor': 0})
+        documento = coll_conf.find_one({'name': 'limite'})
         limite = documento['valor']
 
         # si escuentra el limite
@@ -75,7 +75,6 @@ def checa_envio():
             coll_conf.find_one_and_replace({'name': 'limite'}, {'name': 'limite', 'valor': '0'})
     except ValueError:
         print('Error al obtener los datos de limites de ataques.')
-
 
 # checa_envio() #es la funcion principal
 # coll_log = db['log']
