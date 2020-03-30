@@ -10,6 +10,7 @@ import main
 import analizador
 from pymongo import MongoClient
 import conexiondb
+import wafd
 
 # Variables globales
 client = conexiondb.client
@@ -31,6 +32,10 @@ def hwaf():
             analizador.main()
 
 
+def wafdaemon():
+    wafd.initWAF()
+
+
 def menu():
     print("\n**************** Firewall v1.0 ****************\n")
     print("1. Configuraciones.")
@@ -41,6 +46,7 @@ def principal():
     #se crean los objetos hilo
     hiloCorreo = threading.Thread(name='HCorreo',target=hcorreo, daemon=True)
     wafService = threading.Thread(name='wafService', target=hwaf, daemon=True)
+    wafd = threading.Thread(name='wafd', target=wafdaemon, daemon=True)
     hilomain = threading.Thread(name='HMain', target=main.primeraVez, daemon=False)
     banderaH = 0
 
@@ -54,6 +60,7 @@ def principal():
             if banderaH == 0:
                 hiloCorreo.start()
                 wafService.start()
+                wafd.start()
                 banderaH = 1
             main.primeraVez()
         elif opcion == "2" or opcion == 'exit' or opcion == 'EXIT':
