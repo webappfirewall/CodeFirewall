@@ -181,12 +181,12 @@ def analizador(datos):
     return resultados
 
 
-def guardaBlack(ips):
+def guardaBlack(ips, agente):
     collection = db['blacklist']
 
     if (conf_ini.es_IP_valida(ips) and duplicidad_db.checar_duplicidad('blacklist', ips)):
         ahora = datetime.datetime.now()  # obtiene fecha y hora actual
-        collection.insert_one({"ip": ips, "agent": "", "ataque": "detectado", "date_at": ahora})
+        collection.insert_one({"ip": ips, "agent": str(agente), "ataque": "detectado", "date_at": ahora})
         # busca y borra en caso de estar en la wl
         duplicidad_db.buscaBorra(ips, 'whitelist')
 
@@ -223,9 +223,10 @@ def main():
                 for r in resultados:
                     if r == True:
                         collection = db['trama']
-                        collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1','tipo': tipo, 'analizado':'True'})
-                        guardaBlack(ip)
+                        agente = collection.find_one({'name':'trama'})['agent']
+                        guardaBlack(ip, agente)
                         cuentataques()
+                        collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1','tipo': tipo, 'analizado':'True'})
                         flag = "1"
             #bandera para cuando no tiene ataques, y modificar el analizado a True
             if flag == "0":
