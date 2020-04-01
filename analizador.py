@@ -2,14 +2,11 @@
 # -*- coding: utf-8 -*-
 # By: José María Hernández Estrada & Jason Adair Rossello Romero
 
-from pymongo import MongoClient
-
 import conf_ini
 import duplicidad_db
 import patrones
 import datetime
 import concurrent.futures
-import urllib.parse
 import conexiondb
 
 # Variables globales
@@ -18,62 +15,71 @@ db = client['waf']
 
 
 def extrae_trama():  # extrae la trama de la base de datos en mongo y la ip y las retorna
-    collection = db['trama']
-    if collection.count_documents({}) == 1:
-        datos = collection.find({'name': 'trama'})
-        trama = datos[0]['valor']
-        ip = datos[0]['ip']
-        return trama, ip
+    try:
+        collection = db['trama']
+        if collection.count_documents({}) == 1:
+            datos = collection.find({'name': 'trama'})
+            trama = datos[0]['valor']
+            ip = datos[0]['ip']
+            return trama, ip
+    except ValueError:
+        print("WARNING: Error en extraccion de trama.")
 
 
 def extrae_datos(cadena, tipo):
-    # trama de tipo get '/dvwa/vulnerabilities/sqli/?id=%27+or+1+%3D+%27+1&Submit=Submit'
-    if tipo == "get":
-        informacion = []
-        atributos = cadena.split('?')
-        ruta_ext = atributos[0]
-        parametros = atributos[1]
-        datos_llaveValor = parametros.split('&')
-        # print(datos_llaveValor)
+    try:
+        # trama de tipo get '/dvwa/vulnerabilities/sqli/?id=%27+or+1+%3D+%27+1&Submit=Submit'
+        if tipo == "get":
+            informacion = []
+            atributos = cadena.split('?')
+            ruta_ext = atributos[0]
+            parametros = atributos[1]
+            datos_llaveValor = parametros.split('&')
+            # print(datos_llaveValor)
 
-        for llavev in datos_llaveValor:
-            # separa por el igual
-            datos = llavev.split('=')
-            informacion.append(datos[1])
-        return informacion
-    # trama de tipo post: 'username=%27admin+%40%C3%B1&password=admin&Login=Login'
-    elif tipo == "post":
-        informacion = []
-        atributos = cadena.split('&')
-        for i in atributos:
-            valor = i.split('=')
-            informacion.append(valor[1])
-        return informacion
-    else:
-        print("Error en adquisición de datos.")
+            for llavev in datos_llaveValor:
+                # separa por el igual
+                datos = llavev.split('=')
+                informacion.append(datos[1])
+            return informacion
+        # trama de tipo post: 'username=%27admin+%40%C3%B1&password=admin&Login=Login'
+        elif tipo == "post":
+            informacion = []
+            atributos = cadena.split('&')
+            for i in atributos:
+                valor = i.split('=')
+                informacion.append(valor[1])
+            return informacion
+        else:
+            print("Error en adquisición de datos.")
+    except ValueError:
+        print("WARNING: Error en adquisicion de datos.")
 
 
 def enClaro(datos):
-    # convierte de ascci a caracter y guarada en la misma posicion de la lista
-    tramastring = ""
-    bandera = 0
-    contador = 0
+    try:
+        # convierte de ascci a caracter y guarada en la misma posicion de la lista
+        tramastring = ""
+        bandera = 0
+        contador = 0
 
-    for i in range(len(datos)):
-        if datos[i] == '%':
-            caracterEspecial = datos[i+1] + datos[i+2]
-            tramastring = tramastring + str((b''.fromhex(caracterEspecial)).decode())
-            bandera = 1
-        elif datos[i] == '+':
-            tramastring = tramastring + " "
-        elif contador >= 1:
-            bandera = 0
-            contador = 0
-        elif bandera == 1:
-            contador = contador + 1
-        else:
-            tramastring = tramastring + datos[i]
-    return tramastring
+        for i in range(len(datos)):
+            if datos[i] == '%':
+                caracterEspecial = datos[i+1] + datos[i+2]
+                tramastring = tramastring + str((b''.fromhex(caracterEspecial)).decode())
+                bandera = 1
+            elif datos[i] == '+':
+                tramastring = tramastring + " "
+            elif contador >= 1:
+                bandera = 0
+                contador = 0
+            elif bandera == 1:
+                contador = contador + 1
+            else:
+                tramastring = tramastring + datos[i]
+        return tramastring
+    except ValueError:
+        print("WARNING: Error al pasar en claro la trama.")
 
 def buscaenblack(ip):
     collection = db['blacklist']
@@ -223,6 +229,7 @@ def main():
                 for r in resultados:
                     if r == True:
                         collection = db['trama']
+                        #extrae el agente y lo manda a la funcion guardar en la blacklist
                         agente = collection.find_one({'name':'trama'})['agent']
                         guardaBlack(ip, agente)
                         cuentataques()
