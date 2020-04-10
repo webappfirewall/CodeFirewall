@@ -157,6 +157,12 @@ def sql17(cad):
     return sub
 
 
+def sql18(cad):
+    sub = bool(re.match(r".*<.*>.*</.*>.*", cad, re.I))
+    #print(sub)
+    return sub
+
+
 # sql1('SELECT OrderID, Quantity, CASE WHEN Quantity > 30 THEN "The quantity is greater than 30" WHEN Quantity = 30 THEN "The quantity is 30" ELSE "The quantity is under 30" END AS QuantityText FROM OrderDetails;')
 # sql2("Alicia'; DROP TABLE usuarios; SELECT * FROM datos WHERE nombre LIKE '%")
 # sql3('SELECT * FROM Users WHERE UserId = 105 OR 1=1;')
@@ -169,3 +175,4 @@ def sql17(cad):
 # sql11('CREATE PROCEDURE SelectAllCustomers AS SELECT * FROM Customers GO;')
 # sql13('CREATE TABLE Persons ( PersonID int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255));')
 # sql17('<script type="text/javascript"> //<![CDATA[ var i = 10; if (i < 5) {// some code } //]]></script>')
+sql18("<script alert='hola mundo'>perro</script>")

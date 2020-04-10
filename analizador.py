@@ -183,6 +183,11 @@ def analizador(datos):
         return_value = future.result()
         resultados.append(return_value)
 
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future = executor.submit(patrones.sql18, tramastring)
+        return_value = future.result()
+        resultados.append(return_value)
+
     #print(resultados)
     return resultados
 
