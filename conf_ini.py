@@ -88,7 +88,7 @@ def configuracionInicial():
     #collection.insert_one({"name": "puerto", "valor": str(puerto)})
     #collection.insert_one({"name": "ip", "valor": str(ip)})
     #col_sites.insert_one({"url":str(url),'ip':'192.168.17.149'})
-    col_sites.insert_one({"url": str(url), 'ip': '127.0.0.1'})
+    col_sites.insert_one({"url": str(url), 'ip': '192.168.17.149'})
     # documentos precargados
     collection.insert_one({"name": "numataques", "valor": 500})
     collection.insert_one({"name": "cuarentena", "valor": un_dia})
