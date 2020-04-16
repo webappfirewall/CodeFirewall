@@ -65,7 +65,7 @@ def enClaro(datos):
 
         for i in range(len(datos)):
             if datos[i] == '%':
-                caracterEspecial = datos[i+1] + datos[i+2]
+                caracterEspecial = datos[i + 1] + datos[i + 2]
                 tramastring = tramastring + str((b''.fromhex(caracterEspecial)).decode())
                 bandera = 1
             elif datos[i] == '+':
@@ -80,6 +80,7 @@ def enClaro(datos):
         return tramastring
     except ValueError:
         print("WARNING: Error al pasar en claro la trama.")
+
 
 def buscaenblack(ip):
     collection = db['blacklist']
@@ -188,7 +189,7 @@ def analizador(datos):
         return_value = future.result()
         resultados.append(return_value)
 
-    #print(resultados)
+    # print(resultados)
     return resultados
 
 
@@ -201,8 +202,9 @@ def guardaBlack(ips, agente):
         # busca y borra en caso de estar en la wl
         duplicidad_db.buscaBorra(ips, 'whitelist')
 
+
 def cuentataques():
-    #esta funcion aumenta el contador de ataques en la coleccion log en una unidad, al encontrar un ataque
+    # esta funcion aumenta el contador de ataques en la coleccion log en una unidad, al encontrar un ataque
     collection = db['config']
     documento = collection.find_one({'name': 'limite'})
     limite = int(documento['valor']) + 1
@@ -213,15 +215,17 @@ def main():
     flag = "0"
     trama, ip = extrae_trama()
     collection = db['trama']
-    #la ip no esta analizada
-    colecion = collection.find_one({'name':'trama'})
+    # la ip no esta analizada
+    colecion = collection.find_one({'name': 'trama'})
     status = colecion['analizado']
     if (status == 'False'):
         # la ip esta en la black y debe ser bloqueada
         if (buscaenblack(ip)):
             documento = collection.find_one({'name': 'trama'})
             tipo = documento['tipo']
-            collection.find_one_and_replace({'name': 'trama'}, {'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1', 'tipo': tipo, 'analizado':'True'})
+            collection.find_one_and_replace({'name': 'trama'},
+                                            {'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1', 'tipo': tipo,
+                                             'analizado': 'True'})
         # la ip no esta en la black list y se debe ejecutar el analizador de patrones
         else:
             documento = collection.find_one({'name': 'trama'})
@@ -232,22 +236,25 @@ def main():
             for tram in datos_separados:
                 resultados = analizador(enClaro(tram))
                 for r in resultados:
-                    if r == True:
+                    if r == True and flag == "0":
                         collection = db['trama']
-                        #extrae el agente y lo manda a la funcion guardar en la blacklist
-                        #try:
-                        #    agente = collection.find_one({'name':'trama'})['agent']
-                        #except ValueError:
-                        agente = "No especifícado."
+                        # extrae el agente y lo manda a la funcion guardar en la blacklist
+                        try:
+                            agente = collection.find_one({'name': 'trama'})['agent']
+                        except ValueError:
+                            agente = "No especifícado."
                         guardaBlack(ip, agente)
                         cuentataques()
-                        collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1','tipo': tipo, 'analizado':'True'})
+                        collection.find_one_and_replace({'name': 'trama'},
+                                                        {'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1',
+                                                         'tipo': tipo, 'analizado': 'True'})
                         flag = "1"
-            #bandera para cuando no tiene ataques, y modificar el analizado a True
+            # bandera para cuando no tiene ataques, y modificar el analizado a True
             if flag == "0":
                 collection = db['trama']
-                collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '0','tipo': tipo, 'analizado': 'True'})
-
+                collection.find_one_and_replace({'name': 'trama'},
+                                                {'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '0',
+                                                 'tipo': tipo, 'analizado': 'True'})
 
 # main()
 # cuentataques()
