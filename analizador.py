@@ -235,7 +235,10 @@ def main():
                     if r == True:
                         collection = db['trama']
                         #extrae el agente y lo manda a la funcion guardar en la blacklist
-                        agente = collection.find_one({'name':'trama'})['agent']
+                        try:
+                            agente = collection.find_one({'name':'trama'})['agent']
+                        except ValueError:
+                            agente = "No especifícado."
                         guardaBlack(ip, agente)
                         cuentataques()
                         collection.find_one_and_replace({'name': 'trama'},{'name': 'trama', 'ip': ip, 'valor': trama, 'veredicto': '1','tipo': tipo, 'analizado':'True'})
