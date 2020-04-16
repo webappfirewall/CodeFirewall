@@ -27,7 +27,7 @@ def hwaf():
     collection = db['trama']
     #corre infinitamente el analizador de patrones
     while True:
-        time.sleep(5) #borrar el retardo
+        #time.sleep(5) borrar el retardo
         if collection.count_documents({}) > 0:
             analizador.main()
 
