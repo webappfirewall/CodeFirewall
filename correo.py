@@ -17,7 +17,8 @@ db = client['waf']
 mailsender = "correowaf@gmail.com"
 mailreceip = "chemahernandez013@gmail.com"
 mailserver = 'smtp.gmail.com: 587'
-password = 'Global.nix12345'
+#password = 'Global.nix12345'
+password = 'icfzssrbgkttmbnu'
 subject = 'Alerta Firewall, límite de ataques excedido.'
 
 
